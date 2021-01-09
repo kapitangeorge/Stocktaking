@@ -13,6 +13,6 @@ namespace Stocktaking.Data.Models
 
         public string WhereTo { get; set; }
         
-        public string 
+       
     }
 }

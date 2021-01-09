@@ -17,7 +17,7 @@ namespace Stocktaking.Data.Models
 
         public int OrganizationId { get; set; }
         
-        public string Login { get; set; }
+        public string Username { get; set; }
 
         public string Password { get; set; }
     }

@@ -5,13 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\ViewModels\" />
-    <Folder Include="Views\" />
-    <Folder Include="Controllers\" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.1" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
 </Project>
