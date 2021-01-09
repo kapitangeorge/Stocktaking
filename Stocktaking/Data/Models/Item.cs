@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Stocktaking.Data.Models
 {
-    public class Items
+    public class Item
     {
         public int Id { get; set; }
 
