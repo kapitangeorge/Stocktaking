@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "User ID = postgres; Password = 40579; Server = localhost; Port = 5432; Database = OnlineStore; Integrated Security = true; Pooling = true;"
+  }
+}
