@@ -13,5 +13,7 @@ namespace Stocktaking.Data.Models
         public string IventoryNumber { get; set; }
 
         public int DisplacemnetId { get; set; }
+
+      
     }
 }

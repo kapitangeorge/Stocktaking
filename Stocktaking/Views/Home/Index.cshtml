@@ -1,1 +1,23 @@
-﻿
+﻿@model List<Stocktaking.Data.Models.Item>
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<br />
+<h2>Всё имущество организации</h2>
+
+<a asp-action="AddOrganization" asp-controller="Organization" class="btn btn-outline-success">Добавить перемещение</a>
+
+<br />
+<br />
+@foreach (var item in Model)
+{
+    <div class="alert alert-info mt-3">
+        <b>Наименование организации: </b> @item.Name<br />
+        <b>Инветарный номер: </b> @item.InventoryNumber <br />
+        <b>Состояние: </b> @item.Status <br />
+        
+
+    </div>
+    <br />
+}

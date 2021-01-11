@@ -1,0 +1,19 @@
+﻿@model List<Stocktaking.Data.Models.Displacement>
+@{
+    ViewData["Title"] = "Перемещения";
+}
+
+<h1>Перемещения</h1>
+
+@foreach (var displacement in Model)
+{
+<div class="alert alert-warning mt-3">
+    <b>Откуда: </b> @displacement.FromWhere<br />
+    <b>Куда: </b> @displacement.WhereTo<br />
+    <b>Кто добавил: </b> @displacement.WhoAdd<br />
+    <b>Когда: </b> @displacement.When<br />
+    <b>Состояние: </b> @displacement.Status<br />
+
+</div>
+    <br />
+}

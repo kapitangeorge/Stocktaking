@@ -101,6 +101,42 @@ namespace Stocktaking.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+                var model = new EditUserViewModel { FirstName = user.FirstName, LastName = user.LastName, UserId = user.Id };
+                return View(model);
+            }
+
+            return RedirectToAction("Login", "Account");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser (EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await database.Users.FirstOrDefaultAsync(r => r.Id == model.UserId);
+                if (user != null)
+                {
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+
+                    database.Update(user);
+                    await database.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else ModelState.AddModelError("", "Пользователь не найден");
+            
+            
+            return View(model);
+        }
     }
 }
 
