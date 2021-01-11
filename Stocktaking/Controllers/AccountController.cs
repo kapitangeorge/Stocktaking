@@ -74,7 +74,7 @@ namespace Stocktaking.Controllers
 
                     await Authenticate(model.Username); 
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Organizations", "Organization");
                 }
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -95,6 +95,7 @@ namespace Stocktaking.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
+        
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

@@ -1,0 +1,23 @@
+﻿@model List<Stocktaking.Data.Models.Organization>
+@{
+    ViewData["Title"] = "Организации";
+}
+
+<h1>Все организации</h1>
+
+<a asp-action="AddOrganization" asp-controller="Organization" class="btn btn-outline-success">Добавить организацию</a>
+
+<br />
+<br />
+@foreach (var organization in Model)
+{
+    <div class="alert alert-warning mt-3">
+        <b>Наименование организации: </b> @organization.Name<br />
+        <form method="post" asp-action="ChoiceOrganizations" asp-controller="Organization">
+            <input type="hidden" value="@User.Identity.Name" name="username" />
+            <input type ="hidden" value=" @organization.Id" name="organizationId" />
+            <input type="submit" class="btn btn-outline-info" value="Выбрать"/>
+        </form>
+
+    </div><br />
+}
