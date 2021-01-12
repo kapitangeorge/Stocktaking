@@ -28,7 +28,7 @@ namespace Stocktaking.Controllers
             {
                 var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId);
                 if (items != null)
-                {,
+                {
                     var itemsViewModels = new List<ItemInRoomViewModel>();
                     foreach (var item in items)
                     {
