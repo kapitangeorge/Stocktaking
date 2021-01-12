@@ -2,22 +2,36 @@
 @{
     ViewData["Title"] = "Организации";
 }
-
-<h1>Все организации</h1>
-
-<a asp-action="AddOrganization" asp-controller="Organization" class="btn btn-outline-success">Добавить организацию</a>
-
-<br />
-<br />
-@foreach (var organization in Model)
-{
-    <div class="alert alert-warning mt-3">
-        <b>Наименование организации: </b> @organization.Name<br />
-        <form method="post" asp-action="ChoiceOrganizations" asp-controller="Organization">
-            <input type="hidden" value="@User.Identity.Name" name="username" />
-            <input type ="hidden" value=" @organization.Id" name="organizationId" />
-            <input type="submit" class="btn btn-outline-info" value="Выбрать"/>
-        </form>
-
-    </div><br />
+@{
+    Layout = null;
 }
+<head>
+    <link href="~/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/css/StyleSheet.css" type="text/css" rel="stylesheet" />
+
+</head>
+
+<h1 style="margin-left:4%; margin-top:20px;">Все организации</h1>
+<hr />
+
+<a asp-action="AddOrganization" asp-controller="Organization" class="btn btn-outline-success" style="margin-left:4%;">Добавить организацию</a>
+
+<br />
+<br />
+<div class="row" style="margin-left:4%;">
+    <div class="col-md-5">
+        @foreach (var organization in Model)
+        {
+            <div class="alert alert-warning mt-3">
+                <b>Наименование организации: </b> @organization.Name<br />
+                <form method="post" asp-action="ChoiceOrganizations" asp-controller="Organization">
+                    <input type="hidden" value="@User.Identity.Name" name="username" />
+                    <input type="hidden" value=" @organization.Id" name="organizationId" />
+                    <input type="submit" class="btn btn-outline-info" value="Выбрать" />
+                </form>
+
+            </div>
+            <br />
+        }
+    </div>
+</div>

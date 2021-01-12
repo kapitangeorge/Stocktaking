@@ -12,50 +12,55 @@
 </head>
 
 <body>
-    <h1 style="text-align:center; margin-top:50px;">Регистрация нового пользователя</h1>
+    <h1 style="margin-left:4%; margin-top:20px;">Регистрация нового пользователя</h1>
+    <hr />
+    <div class="row" style="margin-left:5%;">
+        <div class="col-md-4">
+            <form method="post" asp-controller="Account" asp-action="Register">
+                <div asp-validation-summary="All"></div>
+                <div class="form-group">
+                    <label asp-for="Username"></label><br />
+                    <input asp-for="Username" type="email" class="form-control" />
+                    <span asp-validation-for="Username"></span>
+                </div>
 
-    <form method="post" asp-controller="Account" asp-action="Register" style="text-align:center;">
-        <div asp-validation-summary="All"></div>
-        <div class="form-group">
-            <label asp-for="Username"></label><br />
-            <input asp-for="Username" type="email" />
-            <span asp-validation-for="Username"></span>
+                <div class="form-group">
+                    <label asp-for="FirstName"></label> <br />
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName"></label> <br />
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Position"></label> <br />
+                    <input asp-for="Position" class="form-control" />
+                    <span asp-validation-for="Position"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="Password"></label> <br />
+                    <input asp-for="Password" type="password"  class="form-control"/>
+                    <span asp-validation-for="Password"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PasswordConfirm"></label> <br />
+                    <input asp-for="PasswordConfirm" type="password" class="form-control" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Регистрация" class="btn btn-outline-success" />
+                </div>
+
+            </form>
         </div>
-
-        <div class="form-group">
-            <label asp-for="FirstName"></label> <br />
-            <input asp-for="FirstName" />
-            <span asp-validation-for="FirstName"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="LastName"></label> <br />
-            <input asp-for="LastName" />
-            <span asp-validation-for="LastName"></span>
-        </div>
-        
-        <div class="form-group">
-            <label asp-for="Position"></label> <br />
-            <input asp-for="Position" />
-            <span asp-validation-for="Position"></span>
-        </div>
-
-
-        <div class="form-group">
-            <label asp-for="Password"></label> <br />
-            <input asp-for="Password" type="password" />
-            <span asp-validation-for="Password"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="PasswordConfirm"></label> <br />
-            <input asp-for="PasswordConfirm" type="password" />
-            <span asp-validation-for="Password"></span>
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Регистрация" class="btn btn-outline-success" />
-        </div>
-
-    </form>
+    </div>
+    
 </body>

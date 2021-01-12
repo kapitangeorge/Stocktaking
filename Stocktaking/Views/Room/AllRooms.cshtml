@@ -1,0 +1,44 @@
+﻿@model List<Stocktaking.Data.Models.Room>
+@{
+    ViewData["Title"] = "Помещения";
+}
+@{
+    Layout = null;
+}
+<head>
+    <link href="~/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/css/StyleSheet.css" type="text/css" rel="stylesheet" />
+
+</head>
+
+<h1 style="margin-left:4%; margin-top:20px;">Помещения организации</h1>
+<hr />
+<a asp-action="AddRoom" asp-controller="Room" class="btn btn-outline-success" style="margin-left:4%;">Добавить помещение</a>
+
+<br />
+<br />
+<div class="row" style="margin-left:4%;">
+    <div class="col-md-5">
+        @foreach (var room in Model)
+        {
+            <div class="alert alert-info mt-3">
+                <b>Наименование помещения: </b> @room.Name<br />
+                <b>Описание помещения: </b> @room.Description<br />
+            </div>
+            <br />
+        }
+    </div>
+
+
+
+</div>
+<br />
+
+<div style="margin-left:4%;">
+    @if (Model.Capacity > 0)
+    {
+        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary" style="margin-left:4%;">Сохранить</a>
+    }
+</div>
+
+

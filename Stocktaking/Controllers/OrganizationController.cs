@@ -39,16 +39,17 @@ namespace Stocktaking.Controllers
 
             database.Organizations.Add(organization);
             await database.SaveChangesAsync();
+
             if(user != null)
             {
                 user.OrganizationId = organization.Id;
-
+                user.Role = "admin";
                 database.Update(user);
                 await database.SaveChangesAsync();
             }
             
 
-            return RedirectToAction("Organizations");
+            return RedirectToAction("AllRooms","Room");
         }
 
         [HttpPost]
@@ -58,7 +59,7 @@ namespace Stocktaking.Controllers
             if (user != null)
             {
                 user.OrganizationId = organizationId;
-
+                user.Role = "user";
                 database.Update(user);
                 await database.SaveChangesAsync();
             }

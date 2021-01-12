@@ -50,6 +50,8 @@ namespace Stocktaking.Controllers
                 foreach (var item in items)
                 {
                     item.Status = "Списан";
+                    item.RoomId = 0;
+                    item.Location = ""; 
                     database.Update(item);
                     await database.SaveChangesAsync();
 

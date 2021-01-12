@@ -9,9 +9,11 @@ namespace Stocktaking.Data.ViewModels
     public class EditUserViewModel
     {
 
+        [Required]
         [Display(Name="Имя")]
         public string FirstName { get; set; }
 
+        [Required]
         [Display(Name="Фамилия")]
         public string LastName { get; set; }
 

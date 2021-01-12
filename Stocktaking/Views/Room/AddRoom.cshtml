@@ -1,6 +1,6 @@
-﻿@model AddOrganiztionViewModels
+﻿@model AddRoomViewModel
 @{
-    ViewData["Title"] = "Добавление организации";
+    ViewData["Title"] = "Добавление помещения";
 
 }
 @{
@@ -11,23 +11,28 @@
     <link href="~/css/StyleSheet.css" type="text/css" rel="stylesheet" />
 
 </head>
-<h1 style="margin-left:4%; margin-top:20px;">Добавление организации</h1>
+<h1 style="margin-left:4%; margin-top:20px;">Добавление помещения</h1>
 
 <hr />
-
 <div class="row" style="margin-left:4%;">
     <div class="col-md-4">
-        <form method="post" asp-action="AddOrganization" asp-controller="Organization">
+        <form method="post" asp-action="AddRoom" asp-controller="Room">
             <div asp-validation-summary="All"></div>
             <div class="form-group">
                 <label asp-for="Name"></label><br />
-                <input asp-for="Name"class="form-control" />
+                <input asp-for="Name"  class="form-control"/>
                 <span asp-validation-for="Name"></span>
             </div>
-            <input type="hidden" asp-for="Username" value="@User.Identity.Name" /> <br />
+
+            <div class="form-group">
+                <label asp-for="Description"></label><br />
+                <input asp-for="Description" class="form-control"/>
+                <span asp-validation-for="Description"></span>
+            </div>
 
             <input type="submit" value="Добавить" class="btn btn-outline-primary" />
         </form>
     </div>
 </div>
+
 

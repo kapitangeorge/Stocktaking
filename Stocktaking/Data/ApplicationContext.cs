@@ -20,6 +20,8 @@ namespace Stocktaking.Data
 
         public DbSet<ItemDisplacement> ItemDisplacement { get; set; }
 
+        public DbSet<InsideItems> InsideItems { get; set; }
+
         public DbSet<Room> Rooms { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
