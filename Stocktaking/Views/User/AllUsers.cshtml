@@ -1,0 +1,19 @@
+﻿@model List<Stocktaking.Data.Models.User> 
+@{
+    ViewData["Title"] = "Все сотрудники";
+}
+
+<h1>Все сотрудники</h1>
+
+<table class="table">
+    <tr><th>Имя</th><th>Фамилия</th><th>Должность</th></tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.FirstName</td>
+            <td>@user.LastName</td>
+            <td>@user.Position</td>
+        </tr>
+    }
+</table>
+
