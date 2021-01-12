@@ -24,15 +24,20 @@
             <div class="alert alert-info mt-3">
                 <b>Наименование помещения: </b> @room.Name<br />
                 <b>Описание помещения: </b> @room.Description<br />
+
+                <form method="post" asp-action="DeleteRoom" asp-controller="Room">
+                    <input type="hidden" value="@room.Id" name="RoomId" />
+                    <input type="submit" value=" Удалить" class="btn btn-outline-danger" />
+                </form>
             </div>
             <br />
+
         }
     </div>
 
 
 
 </div>
-<br />
 
 <div style="margin-left:4%;">
     @if (Model.Capacity > 0)

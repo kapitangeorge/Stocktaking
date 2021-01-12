@@ -52,5 +52,16 @@ namespace Stocktaking.Controllers
             return View(model);
 
         }
+
+        [HttpPost]
+
+        public async Task<IActionResult> DeleteRoom (int roomId)
+        {
+            var room = await database.Rooms.FirstOrDefaultAsync(r => r.Id == roomId);
+            database.Remove(room);
+            await database.SaveChangesAsync();
+
+            return RedirectToAction("AllRooms");
+        }
     }
 }
