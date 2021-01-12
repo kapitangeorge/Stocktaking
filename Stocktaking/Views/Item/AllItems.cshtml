@@ -1,0 +1,22 @@
+﻿@model List<ItemInRoomViewModel>
+@{
+    ViewData["Title"] = "Все предметы";
+}
+
+<h1>Все сотрудники</h1>
+
+<table class="table">
+    <tr><th>Наименование предмета</th><th>Инвентарный номер</th><th>Описание</th><th>Состояние предмета</th><th>Находится в</th><th>В личном пользовании</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.InventoryNumber</td>
+            <td>@item.Description</td>
+            <td>@item.Status</td>
+            <td>@item.RoomName</td>
+            <td>@item.Location</td>
+        </tr>
+    }
+</table>
+
