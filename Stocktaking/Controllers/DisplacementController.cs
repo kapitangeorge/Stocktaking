@@ -15,42 +15,63 @@ namespace Stocktaking.Controllers
     {
         private ApplicationContext database;
 
-        public DisplacementController (ApplicationContext context)
+        public DisplacementController(ApplicationContext context)
         {
             database = context;
         }
 
-        
-        public IActionResult Displacements()
+
+        public async Task<IActionResult> Displacements()
         {
-            User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
-            var displacements = database.Displacements.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+            User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var displacements = database.Displacements.Where(r => r.OrganizationId == user.OrganizationId).OrderByDescending(r => r.When).ToList();
 
+            var model = new List<DisplacementWithItems>();
+            foreach(var displacement in displacements)
+            {
+                var itemsId = database.ItemDisplacement.Where(r => r.DisplacementId == displacement.Id).ToList();
+                var itemsForModel = new List<Item>();
+                foreach (var itemId in itemsId)
+                {
+                    var item = await database.Items.FirstOrDefaultAsync(r => r.Id == itemId.ItemId);
+                    itemsForModel.Add(item);
 
-            return View(displacements);
+                }
+                model.Add(new DisplacementWithItems { Items = itemsForModel, FromWhere = displacement.FromWhere, Status = displacement.Status, When = displacement.When, WhereTo = displacement.WhereTo, WhoAdd = displacement.WhoAdd });
+            }
+
+            return View(model);
         }
 
 
         [HttpGet]
-        public IActionResult DeleteItemsDisplacements()
+        public async Task<IActionResult> DeleteItemsDisplacement()
         {
-            User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
-            var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId);
-            return View(items);
+            User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId && r.Status != "Списан").ToList();
+            var model = new DeleteItemsViewModel();
+            foreach (var item in items)
+            {
+                model.DeleteItems.Add(new DeleteItemViewModel { Id = item.Id, InventoryNumber = item.InventoryNumber, Name = item.Name, Status = item.Status });
+            }
+            return View(model);
         }
 
         [HttpPost]
 
-        public async Task<IActionResult> DeleteItemsDisplacement(List<Item> items)
+        public async Task<IActionResult> DeleteItemsDisplacement(DeleteItemsViewModel model)
         {
-            if (items != null)
-            {
-                var displacement = new Displacement { OrganizationId = items[0].OrganizationId, When = DateTime.Now, Status = "Списание", WhoAdd = User.Identity.Name };
-                database.Displacements.Add(displacement);
-                await database.SaveChangesAsync();
 
-                foreach (var item in items)
+            var user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var displacement = new Displacement { OrganizationId = user.OrganizationId, When = DateTime.Now, Status = "Списание", WhoAdd = User.Identity.Name };
+            database.Displacements.Add(displacement);
+            await database.SaveChangesAsync();
+
+            foreach (var itemSelect in model.DeleteItems)
+            {
+                if (itemSelect.Select)
                 {
+                    var item = await database.Items.FirstOrDefaultAsync(r => r.Id == itemSelect.Id);
                     item.Status = "Списан";
                     item.RoomId = 0;
                     database.Update(item);
@@ -60,23 +81,24 @@ namespace Stocktaking.Controllers
                     database.ItemDisplacement.Add(itemDisplacement);
                     await database.SaveChangesAsync();
                 }
-
-                return RedirectToAction("Displacements", "Displacement");
-
             }
 
-            return RedirectToAction("DeleteItemDisplacement");
+            return RedirectToAction("AllItems", "Item");
+
+
+
+            
 
         }
 
-           [HttpGet]
-           public async Task<IActionResult> AddDisplacement()
-           {
-                User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
-                var rooms = database.Rooms.Where(r => r.OrganizationId == user.OrganizationId).ToList();
-                ViewBag.Rooms = new SelectList(rooms, "Name", "Name");
-                return View();
-           }
+        [HttpGet]
+        public async Task<IActionResult> AddDisplacement()
+        {
+            User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var rooms = database.Rooms.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+            ViewBag.Rooms = new SelectList(rooms, "Name", "Name");
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddDisplacement(AddDisplacementViewModel model)
@@ -86,8 +108,8 @@ namespace Stocktaking.Controllers
             ViewBag.Rooms = new SelectList(rooms, "Name", "Name");
             if (ModelState.IsValid)
             {
-                
-                var displasement = new Displacement { FromWhere = model.FromWhere, WhereTo = model.WhereTo , Status = "Поступление", When = DateTime.Now, OrganizationId = user.OrganizationId, WhoAdd = user.Username };
+
+                var displasement = new Displacement { FromWhere = model.FromWhere, WhereTo = model.WhereTo, Status = "Поступление", When = DateTime.Now, OrganizationId = user.OrganizationId, WhoAdd = user.FirstName + " " + user.LastName };
                 database.Displacements.Add(displasement);
                 await database.SaveChangesAsync();
 
@@ -98,6 +120,6 @@ namespace Stocktaking.Controllers
 
             return View(model);
         }
-        
+
     }
 }

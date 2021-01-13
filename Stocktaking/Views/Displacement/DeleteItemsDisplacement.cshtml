@@ -1,0 +1,28 @@
+﻿@model DeleteItemsViewModel
+@{
+    ViewData["Title"] = "Списание вещей";
+}
+
+<h1>Списание вещей</h1>
+
+<form method="post" asp-action="DeleteItemsDisplacement" asp-controller="Displacement">
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Инвентарный номер</th>
+            <th>Статус</th>
+            <th>Списание</th>
+        </tr>
+        @for(var i = 0; i < @Model.DeleteItems.Count; i++)
+        {
+            <tr>
+                <td>@Model.DeleteItems[i].Name<input type="hidden" asp-for="DeleteItems[i].Name" /></td>
+                <td>@Model.DeleteItems[i].InventoryNumber<input type="hidden" asp-for="DeleteItems[i].InventoryNumber" /></td>
+                <td>@Model.DeleteItems[i].Status<input type="hidden" asp-for="DeleteItems[i].Status" /></td>
+                <td><input class="form-group" type="checkbox" asp-for="DeleteItems[i].Select"  /><input type="hidden" asp-for="DeleteItems[i].Id" /> <br /></td>
+            </tr>
+        }
+    </table>
+    <input type="submit" value="Выбрать" class="btn btn-outline-danger" />
+</form>
+

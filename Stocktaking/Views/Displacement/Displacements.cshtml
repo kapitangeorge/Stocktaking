@@ -1,4 +1,4 @@
-﻿@model List<Stocktaking.Data.Models.Displacement>
+﻿@model List<DisplacementWithItems>
 @{
     ViewData["Title"] = "Перемещения";
 }
@@ -7,13 +7,92 @@
 
 @foreach (var displacement in Model)
 {
-<div class="alert alert-warning mt-3">
-    <b>Откуда: </b> @displacement.FromWhere<br />
-    <b>Куда: </b> @displacement.WhereTo<br />
-    <b>Кто добавил: </b> @displacement.WhoAdd<br />
-    <b>Когда: </b> @displacement.When<br />
-    <b>Состояние: </b> @displacement.Status<br />
+    @if (displacement.Status == "Списание")
+    {
+        <div class="alert alert-danger mt-3">
 
-</div>
-    <br />
+            <table class="table">
+                <tr><th>Откуда: </th><th>Куда: </th><th>Кто добавил: </th><th>Когда: </th><th>Состояние: </th> <th>Имущество</th></tr>
+
+                <tr>
+                    <td>@displacement.FromWhere</td>
+                    <td>@displacement.WhereTo</td>
+                    <td>@displacement.WhoAdd</td>
+                    <td>@displacement.When</td>
+                    <td>@displacement.Status</td>
+                    <td>
+                        <ul>
+                            @foreach (var item in displacement.Items)
+                            {
+                                <li> @item.Name  @item.InventoryNumber </li>
+                            }
+                        </ul>
+
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <br />
+
+    }
+    else if (displacement.Status == "Поступление")
+    {
+        <div class="alert alert-success mt-3">
+
+            <table class="table">
+                <tr><th>Откуда: </th><th>Куда: </th><th>Кто добавил: </th><th>Когда: </th><th>Состояние: </th> <th>Имущество</th></tr>
+
+                <tr>
+                    <td>@displacement.FromWhere</td>
+                    <td>@displacement.WhereTo</td>
+                    <td>@displacement.WhoAdd</td>
+                    <td>@displacement.When</td>
+                    <td>@displacement.Status</td>
+                    <td>
+                        <ul>
+                            @foreach (var item in displacement.Items)
+                            {
+                                <li> @item.Name  @item.InventoryNumber </li>
+                            }
+                        </ul>
+
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <br />
+
+    }
+    else if (displacement.Status == "Перемещение")
+    {
+        <div class="alert alert-warning mt-3">
+
+            <table class="table">
+                <tr><th>Откуда: </th><th>Куда: </th><th>Кто добавил: </th><th>Когда: </th><th>Состояние: </th> <th>Имущество</th></tr>
+
+                <tr>
+                    <td>@displacement.FromWhere</td>
+                    <td>@displacement.WhereTo</td>
+                    <td>@displacement.WhoAdd</td>
+                    <td>@displacement.When</td>
+                    <td>@displacement.Status</td>
+                    <td>
+                        <ul>
+                            @foreach (var item in displacement.Items)
+                            {
+                                <li> @item.Name  @item.InventoryNumber </li>
+                            }
+                        </ul>
+
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <br />
+
+    }
+
 }

@@ -31,21 +31,29 @@ namespace Stocktaking.Controllers
             User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
             if(user != null)
             {
+                
                 var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId).ToList();
                 if (items != null)
                 {
                     var itemsViewModels = new List<ItemInRoomViewModel>();
                     foreach (var item in items)
                     {
-                        var room = await database.Rooms.FirstOrDefaultAsync(r => r.Id == item.RoomId);
-                        string name = ""
+                        string name, roomName;
+                        name = roomName = "";
+                        if (item.RoomId != 0)
+                        {
+                            var room = await database.Rooms.FirstOrDefaultAsync(r => r.Id == item.RoomId);
+                            roomName = room.Name;
+                        }
+                        
+                        
 ;                        if(item.UserId != 0)
                         {
                             var itemuser = await database.Users.FirstOrDefaultAsync(r => r.Id == item.UserId);
                             name = itemuser.FirstName + "  " + itemuser.LastName;
                         }
                         
-                        itemsViewModels.Add(new ItemInRoomViewModel { Name = item.Name, Description = item.Description, InventoryNumber = item.InventoryNumber, Status = item.Status, RoomName = room.Name, Username = name });
+                        itemsViewModels.Add(new ItemInRoomViewModel { Name = item.Name, Description = item.Description, InventoryNumber = item.InventoryNumber, Status = item.Status, RoomName = roomName, Username = name });
                     }
                     return View(itemsViewModels);
                 }
