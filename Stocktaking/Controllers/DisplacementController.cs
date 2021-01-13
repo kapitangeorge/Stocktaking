@@ -121,5 +121,69 @@ namespace Stocktaking.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MoveItemsDisplacement(int itemId)
+        {
+            var user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var item = await database.Items.FirstOrDefaultAsync(r => r.Id == itemId);
+            ViewBag.Rooms = database.Rooms.Where(r => (r.OrganizationId == user.OrganizationId) && (r.Id != item.RoomId)).ToList();
+             ViewBag.Allusers = database.Users.Where(r => (r.OrganizationId == user.OrganizationId) && (r.Id != item.UserId )).ToList();
+            var model = new MoveItemDisplacementViewModel { ItemId = itemId };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MoveItemsDisplacement(MoveItemDisplacementViewModel model)
+        {
+            var user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var item = await database.Items.FirstOrDefaultAsync(r => r.Id == model.ItemId);
+            ViewBag.Rooms = database.Rooms.Where(r => (r.OrganizationId == user.OrganizationId) && (r.Id != item.RoomId)).ToList();
+            ViewBag.Allusers = database.Users.Where(r => (r.OrganizationId == user.OrganizationId) && (r.Id != item.UserId)).ToList();
+            if (model.RoomId == 0 ^ model.UserId == 0)
+            {
+                var displacement = new Displacement { WhoAdd = user.Username, OrganizationId = user.OrganizationId, When = DateTime.Now, Status = "Перемещение" };
+                if(item.RoomId != 0)
+                {
+                    var room = await database.Rooms.FirstOrDefaultAsync(r => r.Id == item.RoomId);
+                    displacement.FromWhere = room.Name;
+                }
+                else
+                {
+                    var userItem = await database.Users.FirstOrDefaultAsync(r => r.Id == item.UserId);
+                    displacement.FromWhere = user.FirstName + " " + user.LastName;
+                }
+
+
+                if(model.RoomId != 0)
+                {
+                    var whereTo = await database.Rooms.FirstOrDefaultAsync(r => r.Id == model.RoomId);
+                    displacement.WhereTo = whereTo.Name;
+                    item.RoomId = model.RoomId;
+                    item.UserId = 0;
+
+                }
+                else if (model.UserId != 0)
+                {
+                    var whereTo = await database.Users.FirstOrDefaultAsync(r => r.Id == model.UserId);
+                    displacement.WhereTo = whereTo.FirstName + " " + whereTo.LastName;
+                    item.UserId = model.UserId;
+                    item.RoomId = 0;
+                }
+
+                database.Update(item);
+                await database.SaveChangesAsync();
+
+                database.Displacements.Add(displacement);
+                await database.SaveChangesAsync();
+
+                database.ItemDisplacement.Add(new ItemDisplacement { DisplacementId = displacement.Id, ItemId = item.Id });
+                await database.SaveChangesAsync();
+
+                return RedirectToAction("AllItems", "Item");
+            }
+            else ModelState.AddModelError("", "Некоректный ввод");
+
+            return View(model);
+        }
     }
 }

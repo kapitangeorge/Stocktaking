@@ -7,6 +7,7 @@ namespace Stocktaking.Data.ViewModels
 {
     public class ItemInRoomViewModel
     {
+        public int Id { get; set; }
         public string InventoryNumber { get; set; }
 
         public string Name { get; set; }

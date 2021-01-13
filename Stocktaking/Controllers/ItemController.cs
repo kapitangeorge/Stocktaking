@@ -32,7 +32,7 @@ namespace Stocktaking.Controllers
             if(user != null)
             {
                 
-                var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+                var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId).OrderBy(r => r.Status).ToList();
                 if (items != null)
                 {
                     var itemsViewModels = new List<ItemInRoomViewModel>();
@@ -53,7 +53,7 @@ namespace Stocktaking.Controllers
                             name = itemuser.FirstName + "  " + itemuser.LastName;
                         }
                         
-                        itemsViewModels.Add(new ItemInRoomViewModel { Name = item.Name, Description = item.Description, InventoryNumber = item.InventoryNumber, Status = item.Status, RoomName = roomName, Username = name });
+                        itemsViewModels.Add(new ItemInRoomViewModel { Name = item.Name, Description = item.Description, InventoryNumber = item.InventoryNumber, Status = item.Status, RoomName = roomName, Username = name, Id = item.Id });
                     }
                     return View(itemsViewModels);
                 }
