@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Stocktaking.Data;
 using Stocktaking.Data.Models;
 using Stocktaking.Data.ViewModels;
@@ -51,11 +53,10 @@ namespace Stocktaking.Controllers
                 {
                     item.Status = "Списан";
                     item.RoomId = 0;
-                    item.Location = ""; 
                     database.Update(item);
                     await database.SaveChangesAsync();
 
-                    var itemDisplacement = new ItemDisplacement { IventoryNumber = item.InventoryNumber, DisplacemnetId = displacement.Id };
+                    var itemDisplacement = new ItemDisplacement { ItemId = item.Id, DisplacementId = displacement.Id };
                     database.ItemDisplacement.Add(itemDisplacement);
                     await database.SaveChangesAsync();
                 }
@@ -68,10 +69,35 @@ namespace Stocktaking.Controllers
 
         }
 
-            //[HttpPost]
-            ////public async Task<IActionResult> AddItemsDisplacements(AddDisplacementViewModel model)
-            ////{
+           [HttpGet]
+           public async Task<IActionResult> AddDisplacement()
+           {
+                User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+                var rooms = database.Rooms.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+                ViewBag.Rooms = new SelectList(rooms, "Name", "Name");
+                return View();
+           }
 
-            ////}
+        [HttpPost]
+        public async Task<IActionResult> AddDisplacement(AddDisplacementViewModel model)
+        {
+            var user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            var rooms = database.Rooms.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+            ViewBag.Rooms = new SelectList(rooms, "Name", "Name");
+            if (ModelState.IsValid)
+            {
+                
+                var displasement = new Displacement { FromWhere = model.FromWhere, WhereTo = model.WhereTo , Status = "Поступление", When = DateTime.Now, OrganizationId = user.OrganizationId, WhoAdd = user.Username };
+                database.Displacements.Add(displasement);
+                await database.SaveChangesAsync();
+
+                return RedirectToAction("AddItemsDisplacement", "Item", new { displacementId = displasement.Id, whereTo = model.WhereTo });
+
+            }
+            else ModelState.AddModelError("", "Некоректный ввод");
+
+            return View(model);
         }
+        
+    }
 }

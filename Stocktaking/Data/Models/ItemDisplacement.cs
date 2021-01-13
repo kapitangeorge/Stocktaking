@@ -10,9 +10,9 @@ namespace Stocktaking.Data.Models
     {
         public int Id { get; set; }
 
-        public string IventoryNumber { get; set; }
+        public int ItemId { get; set; }
 
-        public int DisplacemnetId { get; set; }
+        public int DisplacementId { get; set; }
 
       
     }

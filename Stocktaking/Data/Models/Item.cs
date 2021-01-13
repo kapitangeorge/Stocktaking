@@ -21,6 +21,6 @@ namespace Stocktaking.Data.Models
 
         public int OrganizationId { get; set; } 
 
-        public string Location { get; set; } //Имя сотрудника, если предмет находится в личном пользовании 
+        public int UserId { get; set; } 
     }
 }

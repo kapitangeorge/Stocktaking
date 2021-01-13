@@ -1,0 +1,46 @@
+﻿@model AddItemsDisplacementVIewModels
+@{
+    ViewData["Title"] = "Добавление материальный ценностей";
+}
+
+
+
+<h1 style="margin-left:4%; margin-top:20px;">Добавление материальный ценностей</h1>
+<hr />
+
+@{
+    var parms = new Dictionary<string, string>
+    {
+                { "displacementId", @Model.DisplacementId.ToString() },
+                { "WhereTo", @Model.WhereTo }
+            };
+}
+<a asp-action="AddItem" asp-controller="Item"asp-all-route-data="parms" class="btn btn-outline-success" style="margin-left:4%;">Добавить предмет</a>
+
+<br />
+<br />
+<div class="row" style="margin-left:4%;">
+    <div class="col-md-5">
+        @foreach (var item in Model.Items)
+        {
+            <div class="alert alert-info mt-3">
+                <b>Наименование предмета: </b> @item.Name<br />
+                <b>Описание предмета: </b> @item.Description<br />
+
+                
+            </div>
+            <br />
+
+        }
+    </div>
+
+
+
+</div>
+
+<div style="margin-left:4%;">
+    @if (Model.Items.Capacity > 0)
+    {
+        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary" style="margin-left:4%;">Завершить</a>
+    }
+</div>

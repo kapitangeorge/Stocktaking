@@ -1,0 +1,43 @@
+﻿@model AddItemViewModel
+@{
+    ViewData["Title"] = "Добавление предмета";
+}
+
+<h1 style="margin-left:4%; margin-top:20px;">Добавление нового предмета</h1>
+<hr />
+<div class="row" style="margin-left:5%;">
+    <div class="col-md-4">
+        <form method="post" asp-controller="Item" asp-action="AddItem">
+            <div asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name"></label><br />
+                <input asp-for="Name"  class="form-control" />
+                <span asp-validation-for="Name"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description"></label> <br />
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="InventoryNumber"></label> <br />
+                <input asp-for="InventoryNumber" class="form-control" />
+                <span asp-validation-for="InventoryNumber"></span>
+            </div>
+
+            
+            
+            
+            
+            <input type="hidden" asp-for="RoomSelectId" value="@Model.RoomSelectId" />
+            <input type="hidden" asp-for="DisplacementId" value="@Model.DisplacementId" />
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-outline-success" />
+            </div>
+
+        </form>
+    </div>
+</div>
+

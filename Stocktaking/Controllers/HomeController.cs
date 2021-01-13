@@ -17,13 +17,14 @@ namespace Stocktaking.Controllers
         {
             database = context;
         }
+
         [Authorize]
         public IActionResult Index()
         {
-            User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
-            var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+            //User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
+            //var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId).ToList();
 
-            return View(items);
+            return View();
         }
     }
 }
