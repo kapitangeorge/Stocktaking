@@ -21,10 +21,15 @@ namespace Stocktaking.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            //User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
-            //var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId).ToList();
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
+                var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId && r.UserId == user.Id && r.Status != "Списан").ToList();
+                return View(items);
+            }
+           
 
-            return View();
+            return RedirectToAction("Login","Account");
         }
     }
 }

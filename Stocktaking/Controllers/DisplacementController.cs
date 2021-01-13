@@ -31,13 +31,15 @@ namespace Stocktaking.Controllers
             {
                 var itemsId = database.ItemDisplacement.Where(r => r.DisplacementId == displacement.Id).ToList();
                 var itemsForModel = new List<Item>();
+                var totalcost = 0.0;
                 foreach (var itemId in itemsId)
                 {
                     var item = await database.Items.FirstOrDefaultAsync(r => r.Id == itemId.ItemId);
+                    totalcost += item.Cost;
                     itemsForModel.Add(item);
 
                 }
-                model.Add(new DisplacementWithItems { Items = itemsForModel, FromWhere = displacement.FromWhere, Status = displacement.Status, When = displacement.When, WhereTo = displacement.WhereTo, WhoAdd = displacement.WhoAdd });
+                model.Add(new DisplacementWithItems { Items = itemsForModel, FromWhere = displacement.FromWhere, Status = displacement.Status, When = displacement.When, WhereTo = displacement.WhereTo, WhoAdd = displacement.WhoAdd, TotalCost = totalcost });
             }
 
             return View(model);
@@ -74,6 +76,7 @@ namespace Stocktaking.Controllers
                     var item = await database.Items.FirstOrDefaultAsync(r => r.Id == itemSelect.Id);
                     item.Status = "Списан";
                     item.RoomId = 0;
+                    item.UserId = 0;
                     database.Update(item);
                     await database.SaveChangesAsync();
 

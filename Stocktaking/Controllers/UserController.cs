@@ -28,7 +28,7 @@ namespace Stocktaking.Controllers
 
             foreach(var oneuser in users)
             {
-                var items = database.Items.Where(r => r.UserId == oneuser.Id).ToList();
+                var items = database.Items.Where(r => r.UserId == oneuser.Id && r.Status != "Списан").ToList();
                 usersWithItemsModel.Add(new UserWithItemsViewModels { FirstName = oneuser.FirstName, LastName = oneuser.LastName, Position = oneuser.Position, Items = items });
             }
             return View(usersWithItemsModel);

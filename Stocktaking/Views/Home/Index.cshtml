@@ -1,23 +1,24 @@
-﻿@*@model List<Stocktaking.Data.Models.Item>*@
+﻿@model List<Stocktaking.Data.Models.Item>
 @{
     ViewData["Title"] = "Главная";
 }
 
 <br />
-<h2>Всё имущество организации</h2>
+<h2>Имущество в вашем распоряжении</h2>
 
 
 
 <br />
 <br />
-@*@foreach (var item in Model)
+@foreach (var item in Model)
 {
     <div class="alert alert-info mt-3">
-        <b>Наименование организации: </b> @item.Name<br />
+        <b>Наименование: </b> @item.Name<br />
+        <b>Описание:</b> @item.Description <br />
         <b>Инветарный номер: </b> @item.InventoryNumber <br />
         <b>Состояние: </b> @item.Status <br />
-        
+        <b>Стоимость: </b> @item.Cost <br />
 
     </div>
     <br />
-}*@
+}

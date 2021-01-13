@@ -21,7 +21,13 @@ namespace Stocktaking.Data.ViewModels
         [Display(Name = "Описание предмета")]
         public string Description { get; set; }
 
+        [Required]
+        [Display(Name = "Стоимость")]
+        public double Cost { get; set; }
+
         public int RoomSelectId { get; set; }
+
+       
 
         public int DisplacementId { get; set; }
     }

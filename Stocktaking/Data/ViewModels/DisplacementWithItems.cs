@@ -19,5 +19,7 @@ namespace Stocktaking.Data.ViewModels
         public string Status { get; set; }
 
         public List<Item> Items { get; set; }
+
+        public double TotalCost { get; set; }
     }
 }

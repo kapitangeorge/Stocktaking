@@ -53,7 +53,7 @@ namespace Stocktaking.Controllers
                             name = itemuser.FirstName + "  " + itemuser.LastName;
                         }
                         
-                        itemsViewModels.Add(new ItemInRoomViewModel { Name = item.Name, Description = item.Description, InventoryNumber = item.InventoryNumber, Status = item.Status, RoomName = roomName, Username = name, Id = item.Id });
+                        itemsViewModels.Add(new ItemInRoomViewModel { Name = item.Name, Description = item.Description, InventoryNumber = item.InventoryNumber, Status = item.Status, RoomName = roomName, Username = name, Id = item.Id, Cost = item.Cost });
                     }
                     return View(itemsViewModels);
                 }
@@ -98,7 +98,7 @@ namespace Stocktaking.Controllers
                 var item = await database.Items.FirstOrDefaultAsync(r => r.InventoryNumber == model.InventoryNumber && r.OrganizationId == user.OrganizationId);
                 if(item == null)
                 {
-                    item = new Item { Name = model.Name, Description = model.Description, InventoryNumber = model.InventoryNumber, OrganizationId = user.OrganizationId, Status = "Новый", RoomId = model.RoomSelectId };
+                    item = new Item { Name = model.Name, Description = model.Description, InventoryNumber = model.InventoryNumber, OrganizationId = user.OrganizationId, Status = "Новый", RoomId = model.RoomSelectId, Cost = model.Cost };
 
                     database.Items.Add(item);
                     await database.SaveChangesAsync();

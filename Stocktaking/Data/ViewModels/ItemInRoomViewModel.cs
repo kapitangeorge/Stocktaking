@@ -19,5 +19,7 @@ namespace Stocktaking.Data.ViewModels
         public string Status { get; set; }
 
         public string Username { get; set; } 
+
+        public double Cost { get; set; }
     }
 }

@@ -22,5 +22,9 @@ namespace Stocktaking.Data.Models
         public int OrganizationId { get; set; } 
 
         public int UserId { get; set; } 
+
+        public string Img { get; set; }
+
+        public double Cost { get; set; }
     }
 }
