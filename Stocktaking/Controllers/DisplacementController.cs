@@ -65,7 +65,7 @@ namespace Stocktaking.Controllers
         {
 
             var user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
-            var displacement = new Displacement { OrganizationId = user.OrganizationId, When = DateTime.Now, Status = "Списание", WhoAdd = User.Identity.Name };
+            var displacement = new Displacement { OrganizationId = user.OrganizationId, When = DateTime.Now, Status = "Списание", WhoAdd = user.FirstName + " " + user.LastName };
             database.Displacements.Add(displacement);
             await database.SaveChangesAsync();
 
@@ -144,7 +144,7 @@ namespace Stocktaking.Controllers
             ViewBag.Allusers = database.Users.Where(r => (r.OrganizationId == user.OrganizationId) && (r.Id != item.UserId)).ToList();
             if (model.RoomId == 0 ^ model.UserId == 0)
             {
-                var displacement = new Displacement { WhoAdd = user.Username, OrganizationId = user.OrganizationId, When = DateTime.Now, Status = "Перемещение" };
+                var displacement = new Displacement { WhoAdd = user.FirstName + " " + user.LastName, OrganizationId = user.OrganizationId, When = DateTime.Now, Status = "Перемещение" };
                 if(item.RoomId != 0)
                 {
                     var room = await database.Rooms.FirstOrDefaultAsync(r => r.Id == item.RoomId);
