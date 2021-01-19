@@ -1,0 +1,18 @@
+﻿@model Stocktaking.Data.Models.Item
+@{
+    ViewData["Title"] = "QrCode";
+}
+
+<h1 class="d-print-none">QrCode</h1>
+
+<h2> Инвентарный номер: @Model.InventoryNumber</h2>
+<div>
+    <img class="d-print-block"  src="@Url.Action("GetQRCode","Qr", new { inventoryNumber = Model.InventoryNumber })" alt="" />
+</div>
+<br />
+<button onclick="window.print();" class="btn btn-outline-success d-print-none">Печать</button>
+
+
+
+
+   
