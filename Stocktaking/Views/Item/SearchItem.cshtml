@@ -1,0 +1,29 @@
+﻿@model List<Stocktaking.Data.Models.Item>
+@{
+    ViewData["Title"] = "Поиск";
+}
+
+<h1>Результат поиска по запросу @ViewBag.Message</h1>
+
+@if (@Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <div class="alert alert-light mt-3">
+            <b>Наименование: </b> @item.Name<br />
+            <b>Описание:</b> @item.Description <br />
+            <b>Инветарный номер: </b> @item.InventoryNumber <br />
+            <b>Состояние: </b> @item.Status <br />
+            <b>Стоимость: </b> @item.Cost <br />
+
+        </div>
+        <br />
+    }
+}
+else
+{
+    <div>
+        <label>Ничего не найдено.</label>
+    </div>
+
+}

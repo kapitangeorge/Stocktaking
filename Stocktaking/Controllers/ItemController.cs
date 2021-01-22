@@ -44,10 +44,10 @@ namespace Stocktaking.Controllers
                         {
                             var room = await database.Rooms.FirstOrDefaultAsync(r => r.Id == item.RoomId);
                             roomName = room.Name;
-                        }
+                        };
 
 
-; if (item.UserId != 0)
+                         if (item.UserId != 0)
                         {
                             var itemuser = await database.Users.FirstOrDefaultAsync(r => r.Id == item.UserId);
                             name = itemuser.FirstName + "  " + itemuser.LastName;
@@ -158,6 +158,19 @@ namespace Stocktaking.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchItem(string searchstring)
+        {
+            if (searchstring != null)
+            {
+                ViewBag.Message = searchstring;
+                var items = await database.Items.Where(r => (EF.Functions.Like(r.Name.ToLower().Trim(' '), "%" + searchstring.ToLower() + "%", " ") || r.Name.ToLower().Trim(' ') == searchstring.ToLower().Trim(' '))).ToListAsync();
+                return View(items);
+            }
+           
+            return View();
         }
     }
 }

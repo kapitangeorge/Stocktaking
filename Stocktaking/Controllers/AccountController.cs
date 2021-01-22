@@ -137,6 +137,46 @@ namespace Stocktaking.Controllers
             
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Username };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await database.Users.FirstOrDefaultAsync(r => r.Id == model.Id);
+                if (user != null)
+                {
+                    if(model.OldPassword == user.Password)
+                    {
+                        user.Password = model.NewPassword;
+                        database.Update(user);
+                        await database.SaveChangesAsync();
+
+                        return RedirectToAction("EditUser");
+                    }
+                    else
+                    {
+                      ModelState.AddModelError(string.Empty, "Пароль не совпадает");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                }
+            }
+
+            return View(model);
+        }
     }
 }
 
