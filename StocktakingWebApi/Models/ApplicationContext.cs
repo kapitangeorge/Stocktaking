@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Stocktaking.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stocktaking.Data
+namespace StocktakingWebApi.Models
 {
     public class ApplicationContext : DbContext
     {
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+        {
 
+        }
         public DbSet<User> Users { get; set; }
 
         public DbSet<Item> Items { get; set; }
@@ -27,11 +29,5 @@ namespace Stocktaking.Data
         public DbSet<InventoryReport> InventoryReports { get; set; }
 
         public DbSet<ItemCheck> ItemsCheck { get; set; }
-
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
-            Database.EnsureCreated();
-        }
-
     }
 }

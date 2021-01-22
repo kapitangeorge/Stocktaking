@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stocktaking.Data;
 using Stocktaking.Data.Models;
 using System;
@@ -19,12 +20,13 @@ namespace Stocktaking.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
             {
-                User user = database.Users.FirstOrDefault(r => r.Username == User.Identity.Name);
-                var items = database.Items.Where(r => r.OrganizationId == user.OrganizationId && r.UserId == user.Id && r.Status != "Списан").ToList();
+                User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
+                if(user == null) RedirectToAction("Login", "Account");
+                var items = await database.Items.Where(r => r.OrganizationId == user.OrganizationId && r.UserId == user.Id && r.Status != "Списан").ToListAsync();
                 return View(items);
             }
            
