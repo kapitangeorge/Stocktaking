@@ -45,7 +45,7 @@ namespace StocktakingWebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>>FindItem([FromBody]string itemName)
+        public async Task<ActionResult<IEnumerable<Item>>>FindItem([FromBody]string searchstring)
         {
             User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
             if(user == null)
@@ -53,7 +53,8 @@ namespace StocktakingWebApi.Controllers
                 return NotFound();
             }
 
-            var items = database.Items.Where(r => EF.Functions.Like(r.Name.ToLower().Trim(' '), "%" + itemName.ToLower() + "%", " ")).ToList();
+            var items = await database.Items.Where(r => (EF.Functions.Like(r.Name.ToLower().Trim(' '), "%" + searchstring.ToLower() + "%", " ") || r.Name.ToLower().Trim(' ') == searchstring.ToLower().Trim(' '))).ToListAsync();
+
 
             return items;
         }
