@@ -165,8 +165,9 @@ namespace Stocktaking.Controllers
         {
             if (searchstring != null)
             {
+                User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
                 ViewBag.Message = searchstring;
-                var items = await database.Items.Where(r => (EF.Functions.Like(r.Name.ToLower().Trim(' '), "%" + searchstring.ToLower() + "%", " ") || r.Name.ToLower().Trim(' ') == searchstring.ToLower().Trim(' '))).ToListAsync();
+                var items = await database.Items.Where(r => ((EF.Functions.Like(r.Name.ToLower().Trim(' '), "%" + searchstring.ToLower() + "%", " ") || r.Name.ToLower().Trim(' ') == searchstring.ToLower().Trim(' ')) && r.OrganizationId == user.OrganizationId)).ToListAsync();
                 return View(items);
             }
            
