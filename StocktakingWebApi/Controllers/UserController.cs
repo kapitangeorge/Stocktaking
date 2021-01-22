@@ -75,14 +75,18 @@ namespace StocktakingWebApi.Controllers
 
         // POST api/<controller>
         [HttpPut("EditUser/{id}")]
-        public async Task<IActionResult> EditUser(int id, [FromBody]User user)
+        public async Task<IActionResult> EditUser(int id, [FromForm]string firstName, [FromForm] string lastName)
         {
-            if(id != user.Id && user.Username != User.Identity.Name)
+            User user = await database.Users.FirstOrDefaultAsync(r => r.Id == id);
+            if(user == null && user.Username != User.Identity.Name)
             {
                 return BadRequest();
             }
 
-            database.Entry(user).State = EntityState.Modified;
+            user.FirstName = firstName;
+            user.LastName = lastName;
+
+            database.Update(user);
 
             await database.SaveChangesAsync();
             return Accepted();

@@ -22,7 +22,7 @@ namespace StocktakingWebApi.Controllers
 
         // GET: api/<controller>/StartInventory
         [HttpGet("StartInventory")]
-        public async Task<ActionResult<IEnumerable<ItemCheck>>> StartInventory()
+        public async Task<ActionResult<InventoryReportWithItems>> StartInventory()
         {
             User user = await database.Users.FirstOrDefaultAsync(r => r.Username == User.Identity.Name);
             if(user == null)
@@ -30,9 +30,11 @@ namespace StocktakingWebApi.Controllers
                 return NotFound();
             }
 
-            var inventoryReport = new InventoryReport { OrganizationId = user.OrganizationId, StartInventory = DateTime.Now};
+            var inventoryReport = new InventoryReport { OrganizationId = user.OrganizationId, StartInventory = DateTime.Now, EndInventory = false};
             database.InventoryReports.Add(inventoryReport);
             await database.SaveChangesAsync();
+
+            var inventoryReportWithItems = new InventoryReportWithItems(inventoryReport);
 
             var items = database.Items.Where(r => r.OrganizationId == inventoryReport.OrganizationId && r.Status != "Списан");
             var checkitems = new List<ItemCheck>();
@@ -58,7 +60,10 @@ namespace StocktakingWebApi.Controllers
             }
 
             await database.SaveChangesAsync();
-            return checkitems;
+
+            inventoryReportWithItems.Items = checkitems;
+
+            return inventoryReportWithItems;
         }
 
         // GET api/<controller>/5
@@ -74,10 +79,10 @@ namespace StocktakingWebApi.Controllers
         }
 
         // POST api/<controller>
-        [HttpPost]
-        public async Task<ActionResult<ItemCheck>> Post([FromForm]string inventoryNumber)
+        [HttpPost("CheckItem")]
+        public async Task<ActionResult<ItemCheck>> Post([FromForm]string inventoryNumber, [FromForm]int inventoryReportId)
         {
-            var itemCheck = await database.ItemsCheck.FirstOrDefaultAsync(r => r.InventoryNumber == inventoryNumber);
+            var itemCheck = await database.ItemsCheck.FirstOrDefaultAsync(r => r.InventoryNumber == inventoryNumber && r.InventoryReportId == inventoryReportId);
 
             if(itemCheck == null)
             {
@@ -90,6 +95,28 @@ namespace StocktakingWebApi.Controllers
             return itemCheck;
         }
 
+        [HttpGet("EndInventory/{id}")]
+        public async Task<ActionResult<InventoryReportWithItems>> EndInventory(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return BadRequest();
+
+            var inventoryReport = await database.InventoryReports.FirstOrDefaultAsync(r => r.Id == id);
+
+            if (inventoryReport == null) return NotFound();
+
+            inventoryReport.EndInventory = true;
+
+            database.Update(inventoryReport);
+            await database.SaveChangesAsync();
+
+            var inventoryReportWithItems = new InventoryReportWithItems(inventoryReport);
+
+            var items = await database.ItemsCheck.Where(r => r.InventoryReportId == inventoryReport.Id).ToListAsync();
+
+            inventoryReportWithItems.Items = items;
+
+            return inventoryReportWithItems;
+        }
        
     }
 }

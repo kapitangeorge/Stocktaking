@@ -12,5 +12,7 @@ namespace StocktakingWebApi.Models
         public int OrganizationId { get; set; }
 
         public DateTime StartInventory { get; set; }
+
+        public bool EndInventory { get; set; }
     }
 }
