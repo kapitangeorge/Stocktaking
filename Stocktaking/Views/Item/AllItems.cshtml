@@ -9,7 +9,7 @@
  <a asp-action="DeleteItemsDisplacement" asp-controller="Displacement" class="btn btn-outline-danger">Добавить списание</a>
 
 <table class="table">
-    <tr><th>Наименование предмета</th><th>Инвентарный номер</th><th>Описание</th><th>Состояние предмета</th><th>Стоимость</th><th>Находится в</th><th>В личном пользовании</th><th></th><th></th></tr>
+    <tr><th>Наименование предмета</th><th>Инвентарный номер</th><th>Описание</th><th>Состояние предмета</th><th>Стоимость</th><th>Находится в</th><th>В личном пользовании</th><th></th><th></th><th></th></tr>
     @foreach (var item in Model)
     {
         <tr>
@@ -20,6 +20,7 @@
             <td>@item.Cost</td>
             <td>@item.RoomName</td>
             <td>@item.Username</td>
+            <td><a asp-action="EditItem" asp-controller="Item" asp-route-itemId="@item.Id" class="btn btn-outline-secondary">Изменить</a></td>
             <td><a asp-action="QrCode" asp-controller="Qr" asp-route-inventoryNumber="@item.InventoryNumber" class="btn btn-outline-info">Qr Code</a></td>
             <td>@if(item.Status != "Списан"){<a asp-action="MoveItemsDisplacement" asp-controller="Displacement" asp-route-itemId="@item.Id" class="btn btn-outline-warning">Переместить предмет</a>}</td>
         </tr>
